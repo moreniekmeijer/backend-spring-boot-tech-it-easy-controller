@@ -1,5 +1,8 @@
 package nl.moreniekmeijer.backendspringboottechiteasycontroller.controllers;
 
+import nl.moreniekmeijer.backendspringboottechiteasycontroller.exceptions.IndexOutOfBoundsException;
+import nl.moreniekmeijer.backendspringboottechiteasycontroller.exceptions.NameTooLongException;
+import nl.moreniekmeijer.backendspringboottechiteasycontroller.exceptions.RecordNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +16,11 @@ public class TelevisionsController {
 
     @PostMapping
     public ResponseEntity<String> addTelevision(@RequestBody String name) {
-        televisionDataBase.add(name);
+        if (name.length() > 20) {
+            throw new NameTooLongException("Naam mag uit niet meer dan 20 karakters bestaan");
+        } else {
+            televisionDataBase.add(name);
+        }
         return ResponseEntity.created(null).body(name + " aangemaakt");
     }
 
@@ -24,9 +31,19 @@ public class TelevisionsController {
 
     @GetMapping("/{id}")
     public ResponseEntity<String> getTelevision(@PathVariable int id) {
-        String specificTelevision = televisionDataBase.get(id);
-        return ResponseEntity.ok(specificTelevision);
+        if (id < 0 || id >= televisionDataBase.size()) {
+            throw new IndexOutOfBoundsException(id + " valt buiten de lijst");
+            // Bovenstaande werkt blijkbaar niet (geeft 500 error), geen idee hoe het wel moet...
+        }
+
+        String television = televisionDataBase.get(id);
+        if (television == null) {
+            throw new RecordNotFoundException("Televisie bestaat niet");
+        }
+
+        return ResponseEntity.ok(television);
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<String> changeTelevision(@PathVariable int id, @RequestParam String name) {
