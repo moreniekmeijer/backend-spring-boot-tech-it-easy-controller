@@ -47,13 +47,17 @@ public class TelevisionsController {
 
     @PutMapping("/{id}")
     public ResponseEntity<String> changeTelevision(@PathVariable int id, @RequestParam String name) {
-        televisionDataBase.set(id, name);
-        return ResponseEntity.ok("televisie " + id + " aangepast naar: " + name);
+        if (televisionDataBase.isEmpty() || id > televisionDataBase.size()) {
+            throw new RecordNotFoundException("Record met id: " + id + " niet gevonden in de database.");
+        } else {
+            televisionDataBase.set(id, name);
+            return ResponseEntity.ok("televisie " + id + " aangepast naar: " + name);
+        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteTelevision(@PathVariable int id) {
-        televisionDataBase.remove(id);
+        televisionDataBase.set(id, null);
         return ResponseEntity.noContent().build();
     }
 }

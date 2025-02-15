@@ -16,11 +16,11 @@ public class ExceptionController {
 
     @ExceptionHandler(value = IndexOutOfBoundsException.class)
     public ResponseEntity<Object> handleIndexOutOfBoundsException(IndexOutOfBoundsException exception) {
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = NameTooLongException.class)
     public ResponseEntity<Object> handleNameTooLongException(NameTooLongException exception) {
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }
