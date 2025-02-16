@@ -3,61 +3,62 @@ package nl.moreniekmeijer.backendspringboottechiteasycontroller.controllers;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.exceptions.IndexOutOfBoundsException;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.exceptions.NameTooLongException;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.exceptions.RecordNotFoundException;
+import nl.moreniekmeijer.backendspringboottechiteasycontroller.models.Television;
+import nl.moreniekmeijer.backendspringboottechiteasycontroller.repositories.TelevisionRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/televisions")
 public class TelevisionsController {
     private List<String> televisionDataBase = new ArrayList<>();
 
+    private final TelevisionRepository televisionRepository;
+
+    public TelevisionsController(TelevisionRepository televisionRepository) {
+        this.televisionRepository = televisionRepository;
+    }
+
     @PostMapping
-    public ResponseEntity<String> addTelevision(@RequestBody String name) {
-        if (name.length() > 20) {
-            throw new NameTooLongException("Naam mag uit niet meer dan 20 karakters bestaan");
-        } else {
-            televisionDataBase.add(name);
-        }
-        return ResponseEntity.created(null).body(name + " aangemaakt");
+    public ResponseEntity<Television> addTelevision(@RequestBody Television television) {
+        televisionRepository.save(television);
+        return ResponseEntity.created(null).body(television);
     }
 
     @GetMapping
-    public ResponseEntity<List<String>> getTelevisions() {
-        return ResponseEntity.ok(televisionDataBase);
+    public ResponseEntity<List<Television>> getTelevisions() {
+        List<Television> foundTelevisions = televisionRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+        return ResponseEntity.ok(foundTelevisions);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<String> getTelevision(@PathVariable int id) {
-        if (id < 0 || id >= televisionDataBase.size()) {
-            throw new IndexOutOfBoundsException(id + " valt buiten de lijst");
-            // Bovenstaande werkt blijkbaar niet (geeft 500 error), geen idee hoe het wel moet...
-        }
-
-        String television = televisionDataBase.get(id);
-        if (television == null) {
-            throw new RecordNotFoundException("Televisie bestaat niet");
-        }
-
-        return ResponseEntity.ok(television);
+    public ResponseEntity<Television> getTelevisionById(@PathVariable Long id) {
+        Optional<Television> foundTelevision = televisionRepository.findById(id);
+        return foundTelevision.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-
     @PutMapping("/{id}")
-    public ResponseEntity<String> changeTelevision(@PathVariable int id, @RequestParam String name) {
-        if (televisionDataBase.isEmpty() || id > televisionDataBase.size()) {
-            throw new RecordNotFoundException("Record met id: " + id + " niet gevonden in de database.");
-        } else {
-            televisionDataBase.set(id, name);
-            return ResponseEntity.ok("televisie " + id + " aangepast naar: " + name);
-        }
+    public ResponseEntity<Television> updateTelevision(@PathVariable Long id, @RequestBody Television updatedTelevision) {
+        Optional<Television> foundTelevision = televisionRepository.findById(id);
+        return foundTelevision.map(existingTelevision -> {
+            existingTelevision.setType(updatedTelevision.getType());
+            existingTelevision.setBrand(updatedTelevision.getBrand());
+            existingTelevision.setName(updatedTelevision.getName());
+            existingTelevision.setPrice(updatedTelevision.getPrice());
+            Television savedTelevision = televisionRepository.save(existingTelevision);
+            return ResponseEntity.ok(savedTelevision);
+        }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteTelevision(@PathVariable int id) {
-        televisionDataBase.set(id, null);
+    public ResponseEntity<Object> deleteTelevision(@PathVariable Long id) {
+        televisionRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

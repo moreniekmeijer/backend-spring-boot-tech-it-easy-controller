@@ -9,6 +9,7 @@ public class Television {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String type;
     private String brand;
     private String name;
     private Double price;
@@ -28,8 +29,9 @@ public class Television {
     public Television() {
     }
 
-    public Television(Long id, String brand, String name, Double price, Double availableSize, int refreshRate, String screenType, String screenQuality, Boolean smartTv, Boolean wifi, Boolean voiceControl, Boolean hdr, Boolean bluetooth, Boolean ambiLight, Integer originalStock, Integer sold) {
+    public Television(Long id, String type, String brand, String name, Double price, Double availableSize, int refreshRate, String screenType, String screenQuality, Boolean smartTv, Boolean wifi, Boolean voiceControl, Boolean hdr, Boolean bluetooth, Boolean ambiLight, Integer originalStock, Integer sold) {
         this.id = id;
+        this.type = type;
         this.brand = brand;
         this.name = name;
         this.price = price;
@@ -53,6 +55,14 @@ public class Television {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getBrand() {
