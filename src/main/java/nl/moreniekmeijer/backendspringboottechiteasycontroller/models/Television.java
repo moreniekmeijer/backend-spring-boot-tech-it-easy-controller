@@ -15,7 +15,10 @@ public class Television {
     private Double price;
     private Double availableSize;
     private int refreshRate;
-    private String screenType;
+
+    @Enumerated(EnumType.STRING)
+    private ScreenType screenType;
+
     private String screenQuality;
     private Boolean smartTv;
     private Boolean wifi;
@@ -29,7 +32,7 @@ public class Television {
     public Television() {
     }
 
-    public Television(Long id, String type, String brand, String name, Double price, Double availableSize, int refreshRate, String screenType, String screenQuality, Boolean smartTv, Boolean wifi, Boolean voiceControl, Boolean hdr, Boolean bluetooth, Boolean ambiLight, Integer originalStock, Integer sold) {
+    public Television(Long id, String type, String brand, String name, Double price, Double availableSize, int refreshRate, ScreenType screenType, String screenQuality, Boolean smartTv, Boolean wifi, Boolean voiceControl, Boolean hdr, Boolean bluetooth, Boolean ambiLight, Integer originalStock, Integer sold) {
         this.id = id;
         this.type = type;
         this.brand = brand;
@@ -105,11 +108,11 @@ public class Television {
         this.refreshRate = refreshRate;
     }
 
-    public String getScreenType() {
+    public ScreenType getScreenType() {
         return screenType;
     }
 
-    public void setScreenType(String screenType) {
+    public void setScreenType(ScreenType screenType) {
         this.screenType = screenType;
     }
 

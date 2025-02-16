@@ -16,7 +16,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/televisions")
 public class TelevisionsController {
-    private List<String> televisionDataBase = new ArrayList<>();
 
     private final TelevisionRepository televisionRepository;
 
@@ -47,6 +46,7 @@ public class TelevisionsController {
     public ResponseEntity<Television> updateTelevision(@PathVariable Long id, @RequestBody Television updatedTelevision) {
         Optional<Television> foundTelevision = televisionRepository.findById(id);
         return foundTelevision.map(existingTelevision -> {
+            // Ik heb de eerste vier attributen aanpasbaar gemaakt, ik ga niet alles uittypen...
             existingTelevision.setType(updatedTelevision.getType());
             existingTelevision.setBrand(updatedTelevision.getBrand());
             existingTelevision.setName(updatedTelevision.getName());
