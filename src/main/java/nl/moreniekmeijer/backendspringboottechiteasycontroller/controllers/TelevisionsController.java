@@ -9,7 +9,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +24,11 @@ public class TelevisionsController {
 
     @PostMapping
     public ResponseEntity<Television> addTelevision(@RequestBody Television television) {
+        if (television.getName().length() > 20) {
+            throw new NameTooLongException(20);
+        } else {
         televisionRepository.save(television);
+        }
         return ResponseEntity.created(null).body(television);
     }
 
@@ -37,16 +40,23 @@ public class TelevisionsController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Television> getTelevisionById(@PathVariable Long id) {
+        if (id < 0) {
+            throw new IndexOutOfBoundsException("ID can not be negative: " + id);
+        }
+
         Optional<Television> foundTelevision = televisionRepository.findById(id);
         return foundTelevision.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseThrow(() -> new RecordNotFoundException("Television with ID " + id + " not found"));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Television> updateTelevision(@PathVariable Long id, @RequestBody Television updatedTelevision) {
+        if (updatedTelevision.getName().length() > 20) {
+            throw new NameTooLongException(20);
+        }
+
         Optional<Television> foundTelevision = televisionRepository.findById(id);
         return foundTelevision.map(existingTelevision -> {
-            // Ik heb de eerste vier attributen aanpasbaar gemaakt, ik ga niet alles uittypen...
             existingTelevision.setType(updatedTelevision.getType());
             existingTelevision.setBrand(updatedTelevision.getBrand());
             existingTelevision.setName(updatedTelevision.getName());
