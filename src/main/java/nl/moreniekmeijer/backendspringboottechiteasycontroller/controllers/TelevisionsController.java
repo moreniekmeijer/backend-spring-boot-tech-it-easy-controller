@@ -1,5 +1,6 @@
 package nl.moreniekmeijer.backendspringboottechiteasycontroller.controllers;
 
+import jakarta.validation.Valid;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.dtos.TelevisionInputDto;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.dtos.TelevisionResponseDto;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.exceptions.IndexOutOfBoundsException;
@@ -25,13 +26,12 @@ public class TelevisionsController {
     }
 
     @PostMapping
-    public ResponseEntity<TelevisionResponseDto> addTelevision(@RequestBody TelevisionInputDto television) {
-        if (television.name.length() > 20) {
-            throw new NameTooLongException(20);
-        } else {
+    public ResponseEntity<TelevisionResponseDto> addTelevision(@Valid @RequestBody TelevisionInputDto television) {
+//        if (television.name.length() > 20) {
+//            throw new NameTooLongException(20);
+//        } else {
         Television savedTelevision = televisionService.saveTelevision(TelevisionMapper.toEntity(television));
             return ResponseEntity.created(null).body(TelevisionMapper.toResponseDto(savedTelevision));
-        }
     }
 
     @GetMapping
@@ -52,10 +52,10 @@ public class TelevisionsController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TelevisionResponseDto> updateTelevision(@PathVariable Long id, @RequestBody TelevisionInputDto televisionDetails) {
-        if (televisionDetails.name.length() > 20) {
-            throw new NameTooLongException(20);
-        }
+    public ResponseEntity<TelevisionResponseDto> updateTelevision(@PathVariable Long id, @Valid @RequestBody TelevisionInputDto televisionDetails) {
+//        if (televisionDetails.name.length() > 20) {
+//            throw new NameTooLongException(20);
+//        }
 
         Television updatedTelevision = televisionService.updateTelevision(id, TelevisionMapper.toEntity(televisionDetails));
 

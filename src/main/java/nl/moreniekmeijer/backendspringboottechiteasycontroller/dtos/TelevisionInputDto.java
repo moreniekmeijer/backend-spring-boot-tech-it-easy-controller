@@ -4,6 +4,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.models.ScreenType;
 
 public class TelevisionInputDto {
@@ -15,6 +16,7 @@ public class TelevisionInputDto {
     public String brand;
 
     @NotBlank(message = "Name cannot be empty")
+    @Size(max = 20, message = "Name cannot be longer than 20 characters")
     public String name;
 
     @NotNull(message = "Price cannot be null")
@@ -25,13 +27,13 @@ public class TelevisionInputDto {
     @Enumerated(EnumType.STRING)
     public ScreenType screenType;
 
-    private String screenQuality;
-    private Boolean smartTv;
-    private Boolean wifi;
-    private Boolean voiceControl;
-    private Boolean hdr;
-    private Boolean bluetooth;
-    private Boolean ambiLight;
-    private Integer originalStock;
-    private Integer sold;
+    public String screenQuality;
+    public Boolean smartTv;
+    public Boolean wifi;
+    public Boolean voiceControl;
+    public Boolean hdr;
+    public Boolean bluetooth;
+    public Boolean ambiLight;
+    public Integer originalStock;
+    public Integer sold;
 }

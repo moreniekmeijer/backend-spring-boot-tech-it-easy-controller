@@ -20,7 +20,15 @@ public class TelevisionMapper {
         television.setAvailableSize(televisionInputDto.availableSize);
         television.setRefreshRate(televisionInputDto.refreshRate);
         television.setScreenType(televisionInputDto.screenType);
-        // and more...
+        television.setScreenQuality(televisionInputDto.screenQuality);
+        television.setSmartTv(televisionInputDto.smartTv);
+        television.setWifi(televisionInputDto.wifi);
+        television.setVoiceControl(televisionInputDto.voiceControl);
+        television.setHdr(televisionInputDto.hdr);
+        television.setBluetooth(televisionInputDto.bluetooth);
+        television.setAmbiLight(televisionInputDto.ambiLight);
+        television.setOriginalStock(televisionInputDto.originalStock);
+        television.setSold(televisionInputDto.sold);
         return television;
     }
 
@@ -31,6 +39,18 @@ public class TelevisionMapper {
         televisionResponseDto.setBrand(television.getBrand());
         televisionResponseDto.setName(television.getName());
         televisionResponseDto.setPrice(television.getPrice());
+        televisionResponseDto.setAvailableSize(television.getAvailableSize());
+        televisionResponseDto.setRefreshRate(television.getRefreshRate());
+        televisionResponseDto.setScreenType(television.getScreenType());
+        televisionResponseDto.setScreenQuality(television.getScreenQuality());
+        televisionResponseDto.setSmartTv(television.getSmartTv());
+        televisionResponseDto.setWifi(television.getWifi());
+        televisionResponseDto.setVoiceControl(television.getVoiceControl());
+        televisionResponseDto.setHdr(television.getHdr());
+        televisionResponseDto.setBluetooth(television.getBluetooth());
+        televisionResponseDto.setAmbiLight(television.getAmbiLight());
+        televisionResponseDto.setOriginalStock(television.getOriginalStock());
+        televisionResponseDto.setSold(television.getSold());
         return televisionResponseDto;
     }
 
