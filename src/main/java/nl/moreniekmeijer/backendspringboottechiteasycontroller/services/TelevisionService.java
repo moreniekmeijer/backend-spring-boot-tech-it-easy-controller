@@ -1,8 +1,10 @@
 package nl.moreniekmeijer.backendspringboottechiteasycontroller.services;
+import nl.moreniekmeijer.backendspringboottechiteasycontroller.exceptions.RecordNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.models.Television;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.repositories.TelevisionRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +23,7 @@ public class TelevisionService {
     }
 
     public List<Television> getAllTelevisions() {
-        return televisionRepository.findAll();
+        return televisionRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     public Television getTelevisionById(Long id) {
@@ -33,22 +35,21 @@ public class TelevisionService {
         return televisionRepository.findById(id);
     }
 
-    public Optional<Television> updateTelevision(Long id, Television television) {
-        Optional<Television> optionalTelevision = televisionRepository.findById(id);
-        if (optionalTelevision.isPresent()) {
-            Television updatedTelevision = optionalTelevision.get();
-            updatedTelevision.setName(television.getName());
-            updatedTelevision.setPrice(television.getPrice());
-            return Optional.of(televisionRepository.save(updatedTelevision));
-        }
-        return Optional.empty();
+    public Television updateTelevision(Long id, Television televisionDetails) {
+        return televisionRepository.findById(id)
+                .map(existingTelevision -> {
+                    existingTelevision.setName(televisionDetails.getName());
+                    existingTelevision.setPrice(televisionDetails.getPrice());
+                    existingTelevision.setBrand(televisionDetails.getBrand());
+                    return televisionRepository.save(existingTelevision);
+                })
+                .orElseThrow(() -> new RecordNotFoundException("Television with ID " + id + " not found"));
     }
 
-    public boolean deleteTelevision(Long id) {
-        if (televisionRepository.existsById(id)) {
-            televisionRepository.deleteById(id);
-            return true;
+    public void deleteTelevision(Long id) {
+        if (!televisionRepository.existsById(id)) {
+            throw new RecordNotFoundException("Television with ID " + id + " not found");
         }
-        return false;
+        televisionRepository.deleteById(id);
     }
 }

@@ -7,17 +7,10 @@ import nl.moreniekmeijer.backendspringboottechiteasycontroller.dtos.TelevisionRe
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.models.ScreenType;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.models.Television;
 
-public class TelevisionMapper {
-    public static TelevisionResponseDto toResponseDto(Television television) {
-        TelevisionResponseDto televisionResponseDto = new TelevisionResponseDto();
-        televisionResponseDto.setId(television.getId());
-        televisionResponseDto.setType(television.getType());
-        televisionResponseDto.setBrand(television.getBrand());
-        televisionResponseDto.setName(television.getName());
-        televisionResponseDto.setPrice(television.getPrice());
-        return televisionResponseDto;
-    }
+import java.util.ArrayList;
+import java.util.List;
 
+public class TelevisionMapper {
     public static Television toEntity(TelevisionInputDto televisionInputDto) {
         Television television = new Television();
         television.setType(televisionInputDto.type);
@@ -29,6 +22,24 @@ public class TelevisionMapper {
         television.setScreenType(televisionInputDto.screenType);
         // and more...
         return television;
+    }
+
+    public static TelevisionResponseDto toResponseDto(Television television) {
+        TelevisionResponseDto televisionResponseDto = new TelevisionResponseDto();
+        televisionResponseDto.setId(television.getId());
+        televisionResponseDto.setType(television.getType());
+        televisionResponseDto.setBrand(television.getBrand());
+        televisionResponseDto.setName(television.getName());
+        televisionResponseDto.setPrice(television.getPrice());
+        return televisionResponseDto;
+    }
+
+    public static List<TelevisionResponseDto> toResponseDtoList(List<Television> televisions) {
+        List<TelevisionResponseDto> televisionResponseDtoList = new ArrayList<>();
+        for (Television television : televisions) {
+            televisionResponseDtoList.add(toResponseDto(television));
+        }
+        return televisionResponseDtoList;
     }
 
 }
