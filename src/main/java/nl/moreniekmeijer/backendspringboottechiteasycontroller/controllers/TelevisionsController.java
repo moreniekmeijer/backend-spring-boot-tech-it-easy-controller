@@ -1,10 +1,12 @@
 package nl.moreniekmeijer.backendspringboottechiteasycontroller.controllers;
 
+import nl.moreniekmeijer.backendspringboottechiteasycontroller.dtos.TelevisionInputDto;
+import nl.moreniekmeijer.backendspringboottechiteasycontroller.dtos.TelevisionResponseDto;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.exceptions.IndexOutOfBoundsException;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.exceptions.NameTooLongException;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.exceptions.RecordNotFoundException;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.models.Television;
-import nl.moreniekmeijer.backendspringboottechiteasycontroller.repositories.TelevisionRepository;
+import nl.moreniekmeijer.backendspringboottechiteasycontroller.services.TelevisionService;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,14 +18,14 @@ import java.util.Optional;
 @RequestMapping("/televisions")
 public class TelevisionsController {
 
-    private final TelevisionRepository televisionRepository;
+    private final TelevisionService televisionService;
 
-    public TelevisionsController(TelevisionRepository televisionRepository) {
-        this.televisionRepository = televisionRepository;
+    public TelevisionsController(TelevisionService televisionService) {
+        this.televisionService = televisionService;
     }
 
     @PostMapping
-    public ResponseEntity<Television> addTelevision(@RequestBody Television television) {
+    public ResponseEntity<TelevisionResponseDto> addTelevision(@RequestBody TelevisionInputDto television) {
         if (television.getName().length() > 20) {
             throw new NameTooLongException(20);
         } else {
