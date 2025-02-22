@@ -1,7 +1,7 @@
 package nl.moreniekmeijer.backendspringboottechiteasycontroller.services;
+import nl.moreniekmeijer.backendspringboottechiteasycontroller.exceptions.IndexOutOfBoundsException;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.exceptions.RecordNotFoundException;
 
-import jakarta.persistence.EntityNotFoundException;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.models.Television;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.repositories.TelevisionRepository;
 import org.springframework.data.domain.Sort;
@@ -27,7 +27,10 @@ public class TelevisionService {
     }
 
     public Television getTelevisionById(Long id) {
-        return televisionRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Television with ID " + id + " not found."));
+        if (id < 0) {
+            throw new IndexOutOfBoundsException("ID cannot be negative: " + id);
+        }
+        return televisionRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Television with ID " + id + " not found."));
     }
 
     // alternative
@@ -43,12 +46,12 @@ public class TelevisionService {
                     existingTelevision.setBrand(televisionDetails.getBrand());
                     return televisionRepository.save(existingTelevision);
                 })
-                .orElseThrow(() -> new RecordNotFoundException("Television with ID " + id + " not found"));
+                .orElseThrow(() -> new RecordNotFoundException("Television with ID " + id + " not found."));
     }
 
     public void deleteTelevision(Long id) {
         if (!televisionRepository.existsById(id)) {
-            throw new RecordNotFoundException("Television with ID " + id + " not found");
+            throw new RecordNotFoundException("Television with ID " + id + " not found.");
         }
         televisionRepository.deleteById(id);
     }
