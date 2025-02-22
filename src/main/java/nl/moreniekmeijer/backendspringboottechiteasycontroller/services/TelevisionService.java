@@ -22,7 +22,10 @@ public class TelevisionService {
         return televisionRepository.save(television);
     }
 
-    public List<Television> getAllTelevisions() {
+    public List<Television> getAllTelevisions(Optional<String> brand) {
+        if (brand.isPresent()) {
+            return televisionRepository.findByBrand(brand.get(), Sort.by(Sort.Direction.ASC, "id"));
+        }
         return televisionRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 

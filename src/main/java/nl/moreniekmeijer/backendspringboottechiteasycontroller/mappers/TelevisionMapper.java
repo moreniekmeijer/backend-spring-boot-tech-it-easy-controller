@@ -1,11 +1,8 @@
 package nl.moreniekmeijer.backendspringboottechiteasycontroller.mappers;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.dtos.TelevisionInputDto;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.dtos.TelevisionResponseDto;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.dtos.TelevisionSalesInfoDto;
-import nl.moreniekmeijer.backendspringboottechiteasycontroller.models.ScreenType;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.models.Television;
 
 import java.util.ArrayList;

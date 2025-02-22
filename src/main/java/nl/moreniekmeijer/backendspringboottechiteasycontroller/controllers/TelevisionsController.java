@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/televisions")
@@ -29,8 +30,8 @@ public class TelevisionsController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TelevisionResponseDto>> getTelevisions() {
-        List<Television> foundTelevisions = televisionService.getAllTelevisions();
+    public ResponseEntity<List<TelevisionResponseDto>> getTelevisions(@RequestParam(value = "brand", required = false) Optional<String> brand) {
+        List<Television> foundTelevisions = televisionService.getAllTelevisions(brand);
         return ResponseEntity.ok(TelevisionMapper.toResponseDtoList(foundTelevisions));
     }
 
@@ -40,8 +41,8 @@ public class TelevisionsController {
     }
 
     @GetMapping("/sales")
-    public ResponseEntity<List<TelevisionSalesInfoDto>> getSalesInfoTelevisions() {
-        List<Television> foundTelevisions = televisionService.getAllTelevisions();
+    public ResponseEntity<List<TelevisionSalesInfoDto>> getSalesInfoTelevisions(@RequestParam(value = "brand", required = false) Optional<String> brand) {
+        List<Television> foundTelevisions = televisionService.getAllTelevisions(brand);
         return ResponseEntity.ok(TelevisionMapper.toSalesInfoDtoList(foundTelevisions));
     }
 

@@ -1,6 +1,5 @@
 package nl.moreniekmeijer.backendspringboottechiteasycontroller.controllers;
 
-import nl.moreniekmeijer.backendspringboottechiteasycontroller.exceptions.NameTooLongException;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.exceptions.RecordNotFoundException;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.exceptions.IndexOutOfBoundsException;
 
@@ -32,11 +31,5 @@ public class ExceptionController {
     @ExceptionHandler(value = IndexOutOfBoundsException.class)
     public ResponseEntity<Object> handleIndexOutOfBoundsException(IndexOutOfBoundsException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
-    }
-
-    // Deze handler is geloof ik overbodig geworden.
-    @ExceptionHandler(value = NameTooLongException.class)
-    public ResponseEntity<Object> handleNameTooLongException(NameTooLongException exception) {
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }
