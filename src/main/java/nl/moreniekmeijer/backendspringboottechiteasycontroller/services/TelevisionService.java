@@ -33,11 +33,6 @@ public class TelevisionService {
         return televisionRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Television with ID " + id + " not found."));
     }
 
-    // alternative
-    public Optional<Television> getTelevisionById2(Long id) {
-        return televisionRepository.findById(id);
-    }
-
     public Television updateTelevision(Long id, Television televisionDetails) {
         return televisionRepository.findById(id)
                 .map(existingTelevision -> {

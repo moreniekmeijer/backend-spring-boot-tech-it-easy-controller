@@ -3,6 +3,7 @@ package nl.moreniekmeijer.backendspringboottechiteasycontroller.controllers;
 import jakarta.validation.Valid;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.dtos.TelevisionInputDto;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.dtos.TelevisionResponseDto;
+import nl.moreniekmeijer.backendspringboottechiteasycontroller.dtos.TelevisionSalesInfoDto;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.mappers.TelevisionMapper;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.models.Television;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.services.TelevisionService;
@@ -36,6 +37,12 @@ public class TelevisionsController {
     @GetMapping("/{id}")
     public ResponseEntity<TelevisionResponseDto> getTelevisionById(@PathVariable Long id) {
         return ResponseEntity.ok(TelevisionMapper.toResponseDto(televisionService.getTelevisionById(id)));
+    }
+
+    @GetMapping("/sales")
+    public ResponseEntity<List<TelevisionSalesInfoDto>> getSalesInfoTelevisions() {
+        List<Television> foundTelevisions = televisionService.getAllTelevisions();
+        return ResponseEntity.ok(TelevisionMapper.toSalesInfoDtoList(foundTelevisions));
     }
 
     @PutMapping("/{id}")

@@ -4,6 +4,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.dtos.TelevisionInputDto;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.dtos.TelevisionResponseDto;
+import nl.moreniekmeijer.backendspringboottechiteasycontroller.dtos.TelevisionSalesInfoDto;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.models.ScreenType;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.models.Television;
 
@@ -54,6 +55,15 @@ public class TelevisionMapper {
         return televisionResponseDto;
     }
 
+    public static TelevisionSalesInfoDto toSalesInfoDto(Television television) {
+        TelevisionSalesInfoDto televisionSalesInfoDto = new TelevisionSalesInfoDto();
+        televisionSalesInfoDto.setId(television.getId());
+        televisionSalesInfoDto.setPrice(television.getPrice());
+        televisionSalesInfoDto.setOriginalStock(television.getOriginalStock());
+        televisionSalesInfoDto.setSold(television.getSold());
+        return televisionSalesInfoDto;
+    }
+
     public static List<TelevisionResponseDto> toResponseDtoList(List<Television> televisions) {
         List<TelevisionResponseDto> televisionResponseDtoList = new ArrayList<>();
         for (Television television : televisions) {
@@ -62,4 +72,11 @@ public class TelevisionMapper {
         return televisionResponseDtoList;
     }
 
+    public static List<TelevisionSalesInfoDto> toSalesInfoDtoList(List<Television> televisions) {
+        List<TelevisionSalesInfoDto> televisionSalesInfoDtoList = new ArrayList<>();
+        for (Television television : televisions) {
+            televisionSalesInfoDtoList.add(toSalesInfoDto(television));
+        }
+        return televisionSalesInfoDtoList;
+    }
 }
