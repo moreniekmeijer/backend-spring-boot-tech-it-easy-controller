@@ -1,10 +1,11 @@
 package nl.moreniekmeijer.backendspringboottechiteasycontroller.repositories;
 
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.models.Television;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface TelevisionRepository extends JpaRepository<Television, Long> {
-    Optional<Television> findByName(String name);
+    List<Television> findByBrand(String brand, Sort sort);
 }
