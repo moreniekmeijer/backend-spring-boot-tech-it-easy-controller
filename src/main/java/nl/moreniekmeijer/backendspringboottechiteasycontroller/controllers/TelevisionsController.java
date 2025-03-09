@@ -1,6 +1,7 @@
 package nl.moreniekmeijer.backendspringboottechiteasycontroller.controllers;
 
 import jakarta.validation.Valid;
+import nl.moreniekmeijer.backendspringboottechiteasycontroller.dtos.IdInputDto;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.dtos.TelevisionInputDto;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.dtos.TelevisionResponseDto;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.dtos.TelevisionSalesInfoDto;
@@ -56,5 +57,11 @@ public class TelevisionsController {
     public ResponseEntity<Void> deleteTelevision(@PathVariable Long id) {
         televisionService.deleteTelevision(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/remotecontrollers/{remoteControllerId}")
+    public ResponseEntity<TelevisionResponseDto> assignRemoteControllerToTelevision(@PathVariable Long id, @PathVariable Long remoteControllerId) {
+        TelevisionResponseDto updatedTelevision = televisionService.assignRemoteControllerToTelevision(id, remoteControllerId);
+        return ResponseEntity.ok(updatedTelevision);
     }
 }

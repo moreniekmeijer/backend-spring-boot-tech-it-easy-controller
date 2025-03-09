@@ -1,9 +1,9 @@
 package nl.moreniekmeijer.backendspringboottechiteasycontroller.models;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "ciModules")
 public class CIModule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

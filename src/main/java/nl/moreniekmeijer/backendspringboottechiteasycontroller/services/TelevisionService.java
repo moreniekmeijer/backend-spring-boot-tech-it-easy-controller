@@ -1,8 +1,14 @@
 package nl.moreniekmeijer.backendspringboottechiteasycontroller.services;
+import jakarta.validation.Valid;
+import nl.moreniekmeijer.backendspringboottechiteasycontroller.dtos.IdInputDto;
+import nl.moreniekmeijer.backendspringboottechiteasycontroller.dtos.TelevisionResponseDto;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.exceptions.IndexOutOfBoundsException;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.exceptions.RecordNotFoundException;
 
+import nl.moreniekmeijer.backendspringboottechiteasycontroller.mappers.TelevisionMapper;
+import nl.moreniekmeijer.backendspringboottechiteasycontroller.models.RemoteController;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.models.Television;
+import nl.moreniekmeijer.backendspringboottechiteasycontroller.repositories.RemoteControllerRepository;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.repositories.TelevisionRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -13,9 +19,11 @@ import java.util.Optional;
 @Service
 public class TelevisionService {
     private final TelevisionRepository televisionRepository;
+    private final RemoteControllerRepository remoteControllerRepository;
 
-    public TelevisionService(TelevisionRepository televisionRepository) {
+    public TelevisionService (TelevisionRepository televisionRepository, RemoteControllerRepository remoteControllerRepository) {
         this.televisionRepository = televisionRepository;
+        this.remoteControllerRepository = remoteControllerRepository;
     }
 
     public Television saveTelevision(Television television) {
@@ -52,5 +60,17 @@ public class TelevisionService {
             throw new RecordNotFoundException("Television with ID " + id + " not found.");
         }
         televisionRepository.deleteById(id);
+    }
+
+    public TelevisionResponseDto assignRemoteControllerToTelevision(Long televisionId, Long remoteControllerId) {
+        RemoteController remoteController = remoteControllerRepository.findById(remoteControllerId)
+                .orElseThrow(() -> new RecordNotFoundException("Remote Controller with ID " + remoteControllerId + " not found."));
+
+        Television television = televisionRepository.findById(televisionId)
+                .orElseThrow(() -> new RecordNotFoundException("Television with ID " + televisionId + " not found."));
+
+        television.setRemoteController(remoteController);
+        televisionRepository.save(television);
+        return TelevisionMapper.toResponseDto(television);
     }
 }

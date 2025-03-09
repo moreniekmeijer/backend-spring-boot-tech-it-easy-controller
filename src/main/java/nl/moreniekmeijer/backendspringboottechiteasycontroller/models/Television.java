@@ -29,6 +29,9 @@ public class Television {
     private Integer originalStock;
     private Integer sold;
 
+    @OneToOne
+    RemoteController remoteController;
+
     public Television() {
     }
 
@@ -186,5 +189,13 @@ public class Television {
 
     public void setSold(Integer sold) {
         this.sold = sold;
+    }
+
+    public RemoteController getRemoteController() {
+        return remoteController;
+    }
+
+    public void setRemoteController(RemoteController remoteController) {
+        this.remoteController = remoteController;
     }
 }

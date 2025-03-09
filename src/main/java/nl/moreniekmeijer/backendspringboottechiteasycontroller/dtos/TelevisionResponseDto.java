@@ -10,9 +10,7 @@ public class TelevisionResponseDto {
     private Double price;
     private Double availableSize;
     private int refreshRate;
-
     private ScreenType screenType;
-
     private String screenQuality;
     private Boolean smartTv;
     private Boolean wifi;
@@ -22,6 +20,7 @@ public class TelevisionResponseDto {
     private Boolean ambiLight;
     private Integer originalStock;
     private Integer sold;
+    private RemoteControllerResponseDto remoteController;
 
     public Long getId() {
         return id;
@@ -157,5 +156,13 @@ public class TelevisionResponseDto {
 
     public void setSold(Integer sold) {
         this.sold = sold;
+    }
+
+    public RemoteControllerResponseDto getRemoteController() {
+        return remoteController;
+    }
+
+    public void setRemoteController(RemoteControllerResponseDto remoteController) {
+        this.remoteController = remoteController;
     }
 }
