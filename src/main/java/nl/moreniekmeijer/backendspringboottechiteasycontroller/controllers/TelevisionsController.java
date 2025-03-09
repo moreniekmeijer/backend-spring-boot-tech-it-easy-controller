@@ -1,11 +1,12 @@
 package nl.moreniekmeijer.backendspringboottechiteasycontroller.controllers;
 
-import nl.moreniekmeijer.backendspringboottechiteasycontroller.exceptions.IndexOutOfBoundsException;
-import nl.moreniekmeijer.backendspringboottechiteasycontroller.exceptions.NameTooLongException;
-import nl.moreniekmeijer.backendspringboottechiteasycontroller.exceptions.RecordNotFoundException;
+import jakarta.validation.Valid;
+import nl.moreniekmeijer.backendspringboottechiteasycontroller.dtos.TelevisionInputDto;
+import nl.moreniekmeijer.backendspringboottechiteasycontroller.dtos.TelevisionResponseDto;
+import nl.moreniekmeijer.backendspringboottechiteasycontroller.dtos.TelevisionSalesInfoDto;
+import nl.moreniekmeijer.backendspringboottechiteasycontroller.mappers.TelevisionMapper;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.models.Television;
-import nl.moreniekmeijer.backendspringboottechiteasycontroller.repositories.TelevisionRepository;
-import org.springframework.data.domain.Sort;
+import nl.moreniekmeijer.backendspringboottechiteasycontroller.services.TelevisionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,59 +17,44 @@ import java.util.Optional;
 @RequestMapping("/televisions")
 public class TelevisionsController {
 
-    private final TelevisionRepository televisionRepository;
+    private final TelevisionService televisionService;
 
-    public TelevisionsController(TelevisionRepository televisionRepository) {
-        this.televisionRepository = televisionRepository;
+    public TelevisionsController(TelevisionService televisionService) {
+        this.televisionService = televisionService;
     }
 
     @PostMapping
-    public ResponseEntity<Television> addTelevision(@RequestBody Television television) {
-        if (television.getName().length() > 20) {
-            throw new NameTooLongException(20);
-        } else {
-        televisionRepository.save(television);
-        }
-        return ResponseEntity.created(null).body(television);
+    public ResponseEntity<TelevisionResponseDto> addTelevision(@Valid @RequestBody TelevisionInputDto television) {
+        Television savedTelevision = televisionService.saveTelevision(TelevisionMapper.toEntity(television));
+            return ResponseEntity.created(null).body(TelevisionMapper.toResponseDto(savedTelevision));
     }
 
     @GetMapping
-    public ResponseEntity<List<Television>> getTelevisions() {
-        List<Television> foundTelevisions = televisionRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-        return ResponseEntity.ok(foundTelevisions);
+    public ResponseEntity<List<TelevisionResponseDto>> getTelevisions(@RequestParam(value = "brand", required = false) Optional<String> brand) {
+        List<Television> foundTelevisions = televisionService.getAllTelevisions(brand);
+        return ResponseEntity.ok(TelevisionMapper.toResponseDtoList(foundTelevisions));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Television> getTelevisionById(@PathVariable Long id) {
-        if (id < 0) {
-            throw new IndexOutOfBoundsException("ID can not be negative: " + id);
-        }
+    public ResponseEntity<TelevisionResponseDto> getTelevisionById(@PathVariable Long id) {
+        return ResponseEntity.ok(TelevisionMapper.toResponseDto(televisionService.getTelevisionById(id)));
+    }
 
-        Optional<Television> foundTelevision = televisionRepository.findById(id);
-        return foundTelevision.map(ResponseEntity::ok)
-                .orElseThrow(() -> new RecordNotFoundException("Television with ID " + id + " not found"));
+    @GetMapping("/sales")
+    public ResponseEntity<List<TelevisionSalesInfoDto>> getSalesInfoTelevisions(@RequestParam(value = "brand", required = false) Optional<String> brand) {
+        List<Television> foundTelevisions = televisionService.getAllTelevisions(brand);
+        return ResponseEntity.ok(TelevisionMapper.toSalesInfoDtoList(foundTelevisions));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Television> updateTelevision(@PathVariable Long id, @RequestBody Television updatedTelevision) {
-        if (updatedTelevision.getName().length() > 20) {
-            throw new NameTooLongException(20);
-        }
-
-        Optional<Television> foundTelevision = televisionRepository.findById(id);
-        return foundTelevision.map(existingTelevision -> {
-            existingTelevision.setType(updatedTelevision.getType());
-            existingTelevision.setBrand(updatedTelevision.getBrand());
-            existingTelevision.setName(updatedTelevision.getName());
-            existingTelevision.setPrice(updatedTelevision.getPrice());
-            Television savedTelevision = televisionRepository.save(existingTelevision);
-            return ResponseEntity.ok(savedTelevision);
-        }).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<TelevisionResponseDto> updateTelevision(@PathVariable Long id, @Valid @RequestBody TelevisionInputDto televisionDetails) {
+        Television updatedTelevision = televisionService.updateTelevision(id, TelevisionMapper.toEntity(televisionDetails));
+        return ResponseEntity.ok(TelevisionMapper.toResponseDto(updatedTelevision));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteTelevision(@PathVariable Long id) {
-        televisionRepository.deleteById(id);
+    public ResponseEntity<Void> deleteTelevision(@PathVariable Long id) {
+        televisionService.deleteTelevision(id);
         return ResponseEntity.noContent().build();
     }
 }
