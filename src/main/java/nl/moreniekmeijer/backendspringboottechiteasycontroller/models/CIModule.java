@@ -2,6 +2,8 @@ package nl.moreniekmeijer.backendspringboottechiteasycontroller.models;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "ciModules")
 public class CIModule {
@@ -11,6 +13,9 @@ public class CIModule {
     private String name;
     private String type;
     private Double price;
+
+    @OneToMany(mappedBy = "ciModule")
+    List<Television> televisions;
 
     public CIModule() {
     }

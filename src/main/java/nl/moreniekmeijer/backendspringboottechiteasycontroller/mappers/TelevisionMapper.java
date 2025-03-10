@@ -54,6 +54,18 @@ public class TelevisionMapper {
             televisionResponseDto.setRemoteController(RemoteControllerMapper.toResponseDto(television.getRemoteController()));
         }
 
+        if (television.getCiModule() != null) {
+            televisionResponseDto.setCiModule(CIModuleMapper.toResponseDto(television.getCiModule()));
+        }
+
+        if (television.getWallBrackets() != null) {
+            televisionResponseDto.setWallBrackets(
+                    television.getWallBrackets().stream()
+                            .map(WallBracketMapper::toResponseDto)
+                            .toList()
+            );
+        }
+
         return televisionResponseDto;
     }
 

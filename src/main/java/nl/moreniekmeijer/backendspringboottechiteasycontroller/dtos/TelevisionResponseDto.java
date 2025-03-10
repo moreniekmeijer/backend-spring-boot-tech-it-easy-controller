@@ -2,6 +2,8 @@ package nl.moreniekmeijer.backendspringboottechiteasycontroller.dtos;
 
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.models.ScreenType;
 
+import java.util.List;
+
 public class TelevisionResponseDto {
     private Long id;
     private String type;
@@ -21,6 +23,8 @@ public class TelevisionResponseDto {
     private Integer originalStock;
     private Integer sold;
     private RemoteControllerResponseDto remoteController;
+    private CIModuleResponseDto ciModule;
+    private List<WallBracketResponseDto> wallBrackets;
 
     public Long getId() {
         return id;
@@ -164,5 +168,21 @@ public class TelevisionResponseDto {
 
     public void setRemoteController(RemoteControllerResponseDto remoteController) {
         this.remoteController = remoteController;
+    }
+
+    public CIModuleResponseDto getCiModule() {
+        return ciModule;
+    }
+
+    public void setCiModule(CIModuleResponseDto ciModule) {
+        this.ciModule = ciModule;
+    }
+
+    public List<WallBracketResponseDto> getWallBrackets() {
+        return wallBrackets;
+    }
+
+    public void setWallBrackets(List<WallBracketResponseDto> wallBrackets) {
+        this.wallBrackets = wallBrackets;
     }
 }

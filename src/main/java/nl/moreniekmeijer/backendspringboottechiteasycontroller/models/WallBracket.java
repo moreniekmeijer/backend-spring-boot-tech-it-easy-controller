@@ -2,6 +2,8 @@ package nl.moreniekmeijer.backendspringboottechiteasycontroller.models;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "wallBrackets")
 public class WallBracket {
@@ -12,6 +14,9 @@ public class WallBracket {
     private Boolean adjustable;
     private String name;
     private Double price;
+
+    @ManyToMany (mappedBy = "wallBrackets")
+    private List<Television> televisions;
 
     public WallBracket() {
     }
@@ -62,5 +67,13 @@ public class WallBracket {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public List<Television> getTelevisions() {
+        return televisions;
+    }
+
+    public void setTelevisions(List<Television> televisions) {
+        this.televisions = televisions;
     }
 }

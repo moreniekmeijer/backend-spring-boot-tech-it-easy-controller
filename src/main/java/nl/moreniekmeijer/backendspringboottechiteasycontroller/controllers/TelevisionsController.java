@@ -1,7 +1,6 @@
 package nl.moreniekmeijer.backendspringboottechiteasycontroller.controllers;
 
 import jakarta.validation.Valid;
-import nl.moreniekmeijer.backendspringboottechiteasycontroller.dtos.IdInputDto;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.dtos.TelevisionInputDto;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.dtos.TelevisionResponseDto;
 import nl.moreniekmeijer.backendspringboottechiteasycontroller.dtos.TelevisionSalesInfoDto;
@@ -27,7 +26,7 @@ public class TelevisionsController {
     @PostMapping
     public ResponseEntity<TelevisionResponseDto> addTelevision(@Valid @RequestBody TelevisionInputDto television) {
         Television savedTelevision = televisionService.saveTelevision(TelevisionMapper.toEntity(television));
-            return ResponseEntity.created(null).body(TelevisionMapper.toResponseDto(savedTelevision));
+        return ResponseEntity.created(null).body(TelevisionMapper.toResponseDto(savedTelevision));
     }
 
     @GetMapping
@@ -62,6 +61,18 @@ public class TelevisionsController {
     @PutMapping("/{id}/remotecontrollers/{remoteControllerId}")
     public ResponseEntity<TelevisionResponseDto> assignRemoteControllerToTelevision(@PathVariable Long id, @PathVariable Long remoteControllerId) {
         TelevisionResponseDto updatedTelevision = televisionService.assignRemoteControllerToTelevision(id, remoteControllerId);
+        return ResponseEntity.ok(updatedTelevision);
+    }
+
+    @PutMapping("/{id}/cimodules/{ciModulesId}")
+    public ResponseEntity<TelevisionResponseDto> assignCIModuleToTelevision(@PathVariable Long id, @PathVariable Long ciModulesId) {
+        TelevisionResponseDto updatedTelevision = televisionService.assignCIModuleToTelevision(id, ciModulesId);
+        return ResponseEntity.ok(updatedTelevision);
+    }
+
+    @PutMapping("/{id}/wallbrackets/{wallBracketId}")
+    public ResponseEntity<TelevisionResponseDto> assignWallBracketToTelevision(@PathVariable Long id, @PathVariable Long wallBracketId) {
+        TelevisionResponseDto updatedTelevision = televisionService.assignWallBracketToTelevision(id, wallBracketId);
         return ResponseEntity.ok(updatedTelevision);
     }
 }
